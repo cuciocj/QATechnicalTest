@@ -1,0 +1,390 @@
+{
+	"info": {
+		"_postman_id": "e722b636-5a85-4883-8084-d53ed5224963",
+		"name": "QA Analyst Assignment",
+		"description": "QA analyst assignment for Freightways Information Services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "22851457-08ec-4228-9a46-859877fa84a3",
+						"exec": [
+							"pm.test(\"200: success\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"200: response is type array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an(\"array\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"200: JSON response each object has the correct properties\", () => {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(e) {\r",
+							"        pm.expect(e).to.have.all.keys('userId', 'id', 'title', 'body')\r",
+							"    })\r",
+							"});\r",
+							"\r",
+							"pm.test(\"200: properties are in correct data type\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(e) {\r",
+							"        pm.expect(e.userId).to.be.a(\"number\")\r",
+							"        pm.expect(e.id).to.be.a(\"number\")\r",
+							"        pm.expect(e.title).to.be.a(\"string\")\r",
+							"        pm.expect(e.body).to.be.a(\"string\")\r",
+							"    })\r",
+							"});\r",
+							"\r",
+							"// schema validation\r",
+							"var schema = {\r",
+							"    \"type\": [\"object\", \"array\"],\r",
+							"    \"properties\": {\r",
+							"        \"userId\": { \"type\": \"number\" },\r",
+							"        \"id\": { \"type\": \"number\" },\r",
+							"        \"title\": { \"type\": \"string\" },\r",
+							"        \"body\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\"userId\", \"id\", \"title\", \"body\"]\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						""
+					]
+				},
+				"description": "get all resources"
+			},
+			"response": []
+		},
+		{
+			"name": "/posts/{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e6d99511-162a-47b3-b84a-57e104ad37fd",
+						"exec": [
+							"pm.test(\"200: resource created\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"201: response is type object\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an(\"object\")\r",
+							"})\r",
+							"    \r",
+							"var response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"201: JSON response each object has the correct properties\", () => {\r",
+							"    pm.expect(response).to.have.all.keys('userId', 'id', 'title', 'body')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"201: properties are in correct data type\", function () {\r",
+							"    pm.expect(response.userId).to.be.a(\"number\")\r",
+							"    pm.expect(response.id).to.be.a(\"number\")\r",
+							"    pm.expect(response.title).to.be.a(\"string\")\r",
+							"    pm.expect(response.body).to.be.a(\"string\")\r",
+							"});\r",
+							"\r",
+							"pm.test(\"201: number properties are more than zero\", function () {\r",
+							"    pm.expect(response.userId).to.be.above(0)\r",
+							"    pm.expect(response.id).to.be.above(0)\r",
+							"})\r",
+							"\r",
+							"// schema validation\r",
+							"var schema = {\r",
+							"    \"type\": [\"object\", \"array\"],\r",
+							"    \"properties\": {\r",
+							"        \"userId\": { \"type\": \"number\" },\r",
+							"        \"id\": { \"type\": \"number\" },\r",
+							"        \"title\": { \"type\": \"string\" },\r",
+							"        \"body\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\"userId\", \"id\", \"title\", \"body\"]\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b176584b-43bd-478b-9bb0-657f26d67a26",
+						"exec": [
+							"pm.globals.set('randomNumber', Math.floor(Math.random() * 100));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/{{randomNumber}}",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						"{{randomNumber}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eeff8fd7-7a3c-400b-8130-18d968859513",
+						"exec": [
+							"pm.test(\"201: resource created\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"201: response is type object\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an(\"object\")\r",
+							"})\r",
+							"    \r",
+							"var response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"201: JSON response each object has the correct properties\", () => {\r",
+							"    pm.expect(response).to.have.all.keys('userId', 'id', 'title', 'body')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"201: properties are in correct data type\", function () {\r",
+							"    pm.expect(response.userId).to.be.a(\"number\")\r",
+							"    pm.expect(response.id).to.be.a(\"number\")\r",
+							"    pm.expect(response.title).to.be.a(\"string\")\r",
+							"    pm.expect(response.body).to.be.a(\"string\")\r",
+							"});\r",
+							"\r",
+							"pm.test(\"201: number properties are more than zero\", function () {\r",
+							"    pm.expect(response.userId).to.be.above(0)\r",
+							"    pm.expect(response.id).to.be.above(0)\r",
+							"})\r",
+							"\r",
+							"// schema validation\r",
+							"var schema = {\r",
+							"    \"type\": [\"object\", \"array\"],\r",
+							"    \"properties\": {\r",
+							"        \"userId\": { \"type\": \"number\" },\r",
+							"        \"id\": { \"type\": \"number\" },\r",
+							"        \"title\": { \"type\": \"string\" },\r",
+							"        \"body\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\"userId\", \"id\", \"title\", \"body\"]\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"foo\",\r\n    \"body\": \"bar\",\r\n    \"userId\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				},
+				"description": "create post resource"
+			},
+			"response": []
+		},
+		{
+			"name": "/posts/{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dc0a876f-2d43-4875-b2cb-47393a936566",
+						"exec": [
+							"pm.test(\"200: resource updated\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"200: response is type object\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an(\"object\")\r",
+							"})\r",
+							"var response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"200: JSON response each object has the correct properties\", () => {\r",
+							"    pm.expect(response).to.have.all.keys('userId', 'id', 'title', 'body')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"200: properties are in correct data type\", function () {\r",
+							"    pm.expect(response.userId).to.be.a(\"number\")\r",
+							"    pm.expect(response.id).to.be.a(\"number\")\r",
+							"    pm.expect(response.title).to.be.a(\"string\")\r",
+							"    pm.expect(response.body).to.be.a(\"string\")\r",
+							"});\r",
+							"\r",
+							"pm.test(\"200: number properties are more than zero\", function () {\r",
+							"    pm.expect(response.userId).to.be.above(0)\r",
+							"    pm.expect(response.id).to.be.above(0)\r",
+							"})\r",
+							"\r",
+							"// schema validation\r",
+							"var schema = {\r",
+							"    \"type\": [\"object\", \"array\"],\r",
+							"    \"properties\": {\r",
+							"        \"userId\": { \"type\": \"number\" },\r",
+							"        \"id\": { \"type\": \"number\" },\r",
+							"        \"title\": { \"type\": \"string\" },\r",
+							"        \"body\": { \"type\": \"string\" }\r",
+							"    },\r",
+							"    \"required\": [\"userId\", \"id\", \"title\", \"body\"]\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "872efb5b-e4cf-493d-a35b-f70299e9f363",
+						"exec": [
+							"pm.globals.set('randomNumber', Math.floor(Math.random() * 100));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"fooupdate\",\r\n    \"body\": \"updatebar\",\r\n    \"userId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/{{randomNumber}}",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						"{{randomNumber}}"
+					]
+				},
+				"description": "update a resource via id"
+			},
+			"response": []
+		},
+		{
+			"name": "/posts/{id}",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "29f865a2-c753-4477-ae74-3e965d198455",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "214003ba-14bb-44ab-84fe-671b387ab310",
+						"exec": [
+							"var schema = {\r",
+							"    \"type\": \"object\"\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/{{$randomInt}}",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						"{{$randomInt}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
